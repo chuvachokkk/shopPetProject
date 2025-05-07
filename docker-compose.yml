@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  server:
+    build: ./server
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev"]
+
+  client:
+    build: ./client
+    ports:
+      - "5137:5137" # Указываем соответствие портов
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev"]
+    depends_on:
+      - server  # Ждём, пока сервер запустится
